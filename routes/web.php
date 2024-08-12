@@ -18,12 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/register', [UserController::class, 'create'])->name('register');
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('user.create');
+// Route::post('/register', [UserController::class, 'create'])->name('register');
+// Route::get('/register', function () {
+//     return view('auth.register');
+// })->name('user.create');
 
-Route::post('/login', [UserController::class, 'login'])->name('login');
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('user.login');
+// Route::post('/login', [UserController::class, 'login'])->name('login');
+// Route::get('/login', function () {
+//     return view('auth.login');
+// })->name('user.login');
