@@ -38,7 +38,7 @@ class JwtMiddleware {
 
     $ip = $this->ipv4Repository->getIPv4();
     $account = $this->jwtManagerRepository->decode($jwt, $ip);
-    $request->attributes->add(['account', $account]);
+    $request->attributes->add(['account' => $account]);
 
     return $next($request);
   }

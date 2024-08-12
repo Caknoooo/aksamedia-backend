@@ -14,7 +14,7 @@ class SqlAdminRepository implements AdminRepositoryInterface
   {
     DB::table('admins')->upsert([
       'id' => $admin->getId()->toString(),
-      'email' => $admin->getEmail(),
+      'email' => $admin->getEmail()->toString(),
       'password' => $admin->getHashPassword(),
       'name' => $admin->getName(),
       'phone' => $admin->getPhone(),

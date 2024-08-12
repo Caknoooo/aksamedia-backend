@@ -44,6 +44,7 @@ class JwtManagerRepository implements JwtManagerRepositoryInterface
         $jwt,
         new Key(config('app.key') . $ip, 'HS256')
       );
+
     } catch (ExpiredException $e) {
       UserException::throw('JWT has expired', 902);
     } catch (SignatureInvalidException $e) {
