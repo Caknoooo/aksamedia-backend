@@ -32,7 +32,8 @@ class RegisterService {
       $request->getPassword(),
       $request->getName(),
       $request->getPhone(),
-      $request->getUsername()
+      $request->getUsername(),
+      false
     );
 
     $this->adminRepository->persist($admin);

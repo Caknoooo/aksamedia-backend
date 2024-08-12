@@ -19,6 +19,7 @@ class SqlAdminRepository implements AdminRepositoryInterface
       'name' => $admin->getName(),
       'phone' => $admin->getPhone(),
       'username' => $admin->getUsername(),
+      'is_logged_in' => $admin->getIsLoggedIn(),
     ], 'id');
   }
 
@@ -58,6 +59,13 @@ class SqlAdminRepository implements AdminRepositoryInterface
     ]);
   }
 
+  public function updateIsLogin(string $adminId, bool $isLoggedIn): void
+  {
+    DB::table('admins')->where('id', $adminId)->update([
+      'is_logged_in' => $isLoggedIn,
+    ]);
+  }
+
   public function getWithPagination(int $page, int $perPage): array
   {
     $rows = DB::table('admins')->offset(($page - 1) * $perPage)->limit($perPage)->get();
@@ -71,7 +79,8 @@ class SqlAdminRepository implements AdminRepositoryInterface
         $row->password,
         $row->name,
         $row->phone,
-        $row->username
+        $row->username,
+        $row->is_logged_in
       );
     }
 
@@ -91,7 +100,8 @@ class SqlAdminRepository implements AdminRepositoryInterface
         $row->password,
         $row->name,
         $row->phone,
-        $row->username
+        $row->username,
+        $row->is_logged_in
       );
     }
     return $admins;

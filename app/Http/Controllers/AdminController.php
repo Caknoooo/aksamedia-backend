@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Core\Application\Service\Admin\Login\LoginRequest;
 use App\Core\Application\Service\Admin\Login\LoginService;
+use App\Core\Application\Service\Admin\Logout\LogoutService;
 use App\Core\Application\Service\Admin\Me\MeService;
 use App\Core\Application\Service\Admin\Register\RegisterRequest;
 use App\Core\Application\Service\Admin\Register\RegisterService;
@@ -74,5 +75,18 @@ class AdminController extends Controller
     }
 
     return $this->successWithData($res, 'berhasil mengambil data');
+  }
+
+  public function logout(Request $request, LogoutService $service): JsonResponse
+  {
+    $account = $request->get('account');
+
+    try {
+      $service->execute($account);
+    } catch (\Exception $e) {
+      return $this->errorWithCode($e->getMessage(), $e->getCode());
+    }
+
+    return $this->success('berhasil logout');
   }
 }

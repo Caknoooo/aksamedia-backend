@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +28,10 @@ Route::middleware(['iam'])->group(
   function () {
     Route::get('/me', [AdminController::class, 'me']);
     Route::post('/logout', [AdminController::class, 'logout']);
+
+    // Employee
+    Route::post('/employees', [EmployeeController::class, 'create']);
+    Route::put('/employees/{id}', [EmployeeController::class, 'update']);
+    Route::delete('/employees/{id}', [EmployeeController::class, 'delete']);
   }
 );

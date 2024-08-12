@@ -20,6 +20,8 @@ class Admin
 
   private string $username;
 
+  private bool $is_logged_in;
+
   private static bool $verifier = false;
 
   public function __construct(
@@ -28,7 +30,8 @@ class Admin
     string $hash_password,
     string $name,
     string $phone,
-    string $username
+    string $username,
+    bool $is_logged_in = false
   ) {
     $this->id = $id;
     $this->email = $email;
@@ -36,6 +39,7 @@ class Admin
     $this->name = $name;
     $this->phone = $phone;
     $this->username = $username;
+    $this->is_logged_in = $is_logged_in;
   }
 
   public static function create(
@@ -102,6 +106,15 @@ class Admin
   {
     return $this->username;
   }
+
+  /**
+   * @return bool
+   */
+  public function getIsLoggedIn(): bool
+  {
+    return $this->is_logged_in;
+  }
+  
 
   /**
    * @return bool

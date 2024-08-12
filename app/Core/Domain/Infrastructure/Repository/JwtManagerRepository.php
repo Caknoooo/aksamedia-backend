@@ -37,6 +37,25 @@ class JwtManagerRepository implements JwtManagerRepositoryInterface
     );
   }
 
+  // saya memiliki endpoint logout yang akan menghapus token / expired token, tolong buatkan fungsi untuk membuat token expired
+  public function expire(string $jwt, string $ip): string
+  {
+    $jwt = JWT::decode(
+      $jwt,
+      new Key(config('app.key') . $ip, 'HS256')
+    );
+
+    return JWT::encode(
+      [
+        'admin_id' => $jwt->admin_id,
+        'is_expired' => true,
+        'exp' => time(),
+      ],
+      config('app.key') . $ip,
+      'HS256'
+    );
+  }
+
   public function decode(string $jwt, string $ip): AdminAccount
   {
     try {
@@ -56,6 +75,10 @@ class JwtManagerRepository implements JwtManagerRepositoryInterface
     $admin = $this->adminRepository->findById($jwt->admin_id);
     if ($admin === null) {
       UserException::throw('Admin not found', 901);
+    }
+
+    if($admin->getIsLoggedIn() === false) {
+      UserException::throw('Admin is logged out, please login again', 904);
     }
 
     return new AdminAccount($admin->getId());

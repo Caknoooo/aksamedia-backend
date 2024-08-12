@@ -39,6 +39,7 @@ class LoginService {
 
     $ip = $this->ipv4_repository->getIPv4();
     $token = $this->jwt_manager_repository->encode($admin, $ip);
+    $this->admin_repository->updateIsLogin($admin->getId()->toString(), true);
 
     return new LoginResponse($token, $admin);
   }
