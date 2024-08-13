@@ -6,6 +6,8 @@ use App\Core\Application\Service\Employee\Create\CreateEmployeeRequest;
 use App\Core\Application\Service\Employee\Create\CreateEmployeeService;
 use App\Core\Application\Service\Employee\Delete\DeleteEmployeeRequest;
 use App\Core\Application\Service\Employee\Delete\DeleteEmployeeService;
+use App\Core\Application\Service\Employee\Index\GetAllEmployeeRequest;
+use App\Core\Application\Service\Employee\Index\GetAllEmployeeService;
 use App\Core\Application\Service\Employee\Update\UpdateEmployeeRequest;
 use App\Core\Application\Service\Employee\Update\UpdateEmployeeService;
 use Illuminate\Http\JsonResponse;
@@ -59,7 +61,6 @@ class EmployeeController extends Controller {
   }
 
   public function update(Request $request, UpdateEmployeeService $service, string $id): JsonResponse {
-    dd($request->all());
     $request->validate([
       'name' => 'min:3|max:255|string',
       'phone' => 'min:3|max:255|string',
@@ -87,5 +88,18 @@ class EmployeeController extends Controller {
     }
 
     return $this->success("berhasil mengupdate karyawan");
+  }
+
+  public function index(Request $request, GetAllEmployeeService $service): JsonResponse {
+    $req = new GetAllEmployeeRequest(
+      $request->query('page'),
+      $request->query('per_page'),
+      $request->query('name'),
+      $request->query('division_id')
+    );
+
+    $response = $service->execute($req);
+
+    return $this->successWithData($response, "berhasil mendapatkan data karyawan");
   }
 }

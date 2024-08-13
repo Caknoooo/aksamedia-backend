@@ -13,7 +13,7 @@ interface EmployeeRepositoryInterface {
 
   public function update(Employee $employee): void;
 
-  public function getWithPagination(int $page, int $perPage): array;
+  public function getWithPagination(int $page, int $perPage, array $filters): array;
 
   public function constructFromRows(array $rows): array;
 }

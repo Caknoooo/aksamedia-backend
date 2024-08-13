@@ -48,32 +48,58 @@ class SqlEmployeeRepository implements EmployeeRepositoryInterface
     ]);
   }
 
-  public function getWithPagination(int $page, int $perPage): array
+  public function getWithPagination(int $page, int $per_page, array $filters): array
   {
-    $rows = DB::table('employees')->skip(($page - 1) * $perPage)->take($perPage)->get();
-    if ($rows === null) {
-      return [];
+    $query = DB::table('employees')
+      ->join('divisions', 'employees.division_id', '=', 'divisions.id')
+      ->select('employees.*', 'divisions.name as division_name', 'divisions.id as division_id');
+
+    if (!empty($filters['name'])) {
+      $query->where('employees.name', 'LIKE', '%' . $filters['name'] . '%');
     }
+
+    if (!empty($filters['division_id'])) {
+      $query->where('division_id', $filters['division_id']);
+    }
+
+    $rows = $query->paginate($per_page, ['*'], 'page', $page);
 
     $employees = [];
 
     foreach ($rows as $row) {
-      $employees[] = new Employee(
-        new EmployeeId($row->id),
-        $row->name,
-        $row->phone,
-        $row->image,
-        new DivisionId($row->division_id),
-        $row->position
-      );
+      $employees[] = [
+        'id' => $row->id,
+        'name' => $row->name,
+        'phone' => $row->phone,
+        'image' => $row->image,
+        'position' => $row->position,
+        'division_id' => $row->division_id,
+        'division_name' => $row->division_name,
+      ];
     }
 
-    return $employees;
+    return [
+      'data' => $employees,
+      'max_page' => ceil($rows->total() / $per_page)
+    ];
+  }
+
+  public function constructFromRow($row): Employee
+  {
+    return new Employee(
+      new EmployeeId($row->id),
+      $row->name,
+      $row->phone,
+      $row->image,
+      new DivisionId($row->division_id),
+      $row->position
+    );
   }
 
   public function constructFromRows(array $rows): array
   {
     $employees = [];
+    dd($rows);
     foreach ($rows as $row) {
       $employees[] = new Employee(
         new EmployeeId($row->id),
