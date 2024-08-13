@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SQLController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,3 +41,6 @@ Route::middleware(['iam'])->group(
     Route::get('/divisions', [DivisionController::class, 'index']);
   }
 );
+
+Route::get('/nilaiST', [SQLController::class, 'nilaiST']);
+Route::get('/nilaiRT', [SQLController::class, 'nilaiRT']);
